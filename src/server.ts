@@ -5,8 +5,8 @@ import type { CorsOptions } from "cors";
 import cookieParser from "cookie-parser";
 import compression from "compression";
 import helmet from "helmet";
-import limiter from "./lib/express_rate_limit";
-import router from "./routes";
+import limiter from "@/lib/express_rate_limit";
+import router from "@/routes";
 
 const app = express();
 const corsOptions: CorsOptions = {
