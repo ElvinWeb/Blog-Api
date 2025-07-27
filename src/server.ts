@@ -7,6 +7,8 @@ import compression from "compression";
 import helmet from "helmet";
 import limiter from "@/lib/express_rate_limit";
 import router from "@/routes";
+import { logger } from "@/lib/winston";
+import { connectToDatabase, disconnectFromDatabase } from "@/lib/mongoose";
 
 const app = express();
 const corsOptions: CorsOptions = {
@@ -40,13 +42,14 @@ app.use(helmet());
 app.use(limiter);
 (async () => {
   try {
+    await connectToDatabase();
     app.use("/api/v1", router);
 
     app.listen(config.PORT, () => {
-      console.info(`Server running: http://localhost:${config.PORT}`);
+      logger.info(`Server running: http://localhost:${config.PORT}`);
     });
   } catch (err) {
-    console.error("Failed to start the server", err);
+    logger.error("Failed to start the server!", err);
 
     if (config.NODE_ENV === "production") {
       process.exit(1);
@@ -56,10 +59,11 @@ app.use(limiter);
 
 const handleServerShutdown = async () => {
   try {
-    console.warn("Server SHUTDOWN");
+    await disconnectFromDatabase();
+    logger.warn("Server Shutdown!");
     process.exit(0);
   } catch (err) {
-    console.error("Error during server shutdown", err);
+    logger.error("Error during server shutdown!", err);
   }
 };
 

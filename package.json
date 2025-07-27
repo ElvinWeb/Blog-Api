@@ -28,6 +28,7 @@
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.1",
     "helmet": "^8.1.0",
-    "mongoose": "^8.16.5"
+    "mongoose": "^8.16.5",
+    "winston": "^3.17.0"
   }
 }
