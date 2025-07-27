@@ -1,9 +1,5 @@
-import { Schema, model, Types } from "mongoose";
-
-interface IToken {
-  token: string;
-  userId: Types.ObjectId;
-}
+import { IToken } from "@/types/token.types";
+import { model, Schema } from "mongoose";
 
 const tokenSchema = new Schema<IToken>({
   token: {

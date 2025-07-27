@@ -5,12 +5,13 @@ import { logger } from "@/lib/winston";
 
 import type { Request, Response, NextFunction } from "express";
 import type { Types } from "mongoose";
+import { HttpStatusCodes } from "@/constants/api.constants";
 
 const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader?.startsWith("Bearer ")) {
-    res.status(401).json({
+    res.status(HttpStatusCodes.UNAUTHORIZED).json({
       code: "AuthenticationError",
       message: "Access denied, no token provided!",
     });
@@ -27,7 +28,7 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
     return next();
   } catch (err) {
     if (err instanceof TokenExpiredError) {
-      res.status(401).json({
+      res.status(HttpStatusCodes.UNAUTHORIZED).json({
         code: "AuthenticationError",
         message: "Access token expired, request a new one with refresh token!",
       });
@@ -35,14 +36,14 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
     }
 
     if (err instanceof JsonWebTokenError) {
-      res.status(401).json({
+      res.status(HttpStatusCodes.UNAUTHORIZED).json({
         code: "AuthenticationError",
         message: "Access token invalid!",
       });
       return;
     }
 
-    res.status(500).json({
+    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
       code: "ServerError",
       message: "Internal server error!",
       error: err,

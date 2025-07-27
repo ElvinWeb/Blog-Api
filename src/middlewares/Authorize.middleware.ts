@@ -1,6 +1,7 @@
+import { HttpStatusCodes } from "@/constants/api.constants";
 import { logger } from "@/lib/winston";
 import User from "@/models/User.model";
-import { TAuthRole } from "@/types";
+import { TAuthRole } from "@/types/user.types";
 
 import type { Request, Response, NextFunction } from "express";
 
@@ -12,7 +13,7 @@ const authorize = (roles: TAuthRole[]) => {
       const user = await User.findById(userId).select("role").exec();
 
       if (!user) {
-        res.status(404).json({
+        res.status(HttpStatusCodes.NOT_FOUND).json({
           code: "NotFound",
           message: "User not found!",
         });
@@ -20,7 +21,7 @@ const authorize = (roles: TAuthRole[]) => {
       }
 
       if (!roles.includes(user.role)) {
-        res.status(403).json({
+        res.status(HttpStatusCodes.FORBIDDEN).json({
           code: "AuthorizationError",
           message: "Access denied, insufficient permissions!",
         });
@@ -29,7 +30,7 @@ const authorize = (roles: TAuthRole[]) => {
 
       return next();
     } catch (err) {
-      res.status(500).json({
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
         code: "ServerError",
         message: "Internal server error!",
         error: err,

@@ -1,8 +1,9 @@
+import config from "@/config";
 import rateLimit from "express-rate-limit";
 
 const limiter = rateLimit({
-  windowMs: 6000,
-  limit: 60,
+  windowMs: config.REQ_WINDOWS_MS,
+  limit: config.REQ_LIMIT,
   standardHeaders: "draft-8",
   legacyHeaders: false,
   message: {

@@ -9,12 +9,13 @@ import limiter from "@/lib/express_rate_limit";
 import router from "@/routes";
 import { logger } from "@/lib/winston";
 import { connectToDatabase, disconnectFromDatabase } from "@/lib/mongoose";
+import { Environments } from "@/constants/environment.constants";
 
 const app = express();
 const corsOptions: CorsOptions = {
   origin(origin, callback) {
     if (
-      config.NODE_ENV == "development" ||
+      config.NODE_ENV == Environments.DEVELOPMENT ||
       !origin ||
       config.WHITELIST_ORIGINS.includes(origin)
     ) {
@@ -24,7 +25,7 @@ const corsOptions: CorsOptions = {
         new Error(`Cors error: ${origin} is not allowed by CORS`),
         false,
       );
-      console.log(`Cors error: ${origin} is not allowed by CORS`);
+      logger.error(`Cors error: ${origin} is not allowed by CORS`);
     }
   },
 };
@@ -35,7 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   compression({
-    threshold: 1024,
+    threshold: config.COMPRESSION_THRESHOLD,
   }),
 );
 app.use(helmet());
@@ -51,7 +52,7 @@ app.use(limiter);
   } catch (err) {
     logger.error("Failed to start the server!", err);
 
-    if (config.NODE_ENV === "production") {
+    if (config.NODE_ENV === Environments.PRODUCTION) {
       process.exit(1);
     }
   }

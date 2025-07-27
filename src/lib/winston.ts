@@ -1,12 +1,14 @@
 import winston from "winston";
 
 import config from "@/config";
+import { Environments } from "@/constants/environment.constants";
 
-const { combine, timestamp, json, errors, align, printf, colorize } = winston.format;
+const { combine, timestamp, json, errors, align, printf, colorize } =
+  winston.format;
 
 const transports: winston.transport[] = [];
 
-if (config.NODE_ENV !== "production") {
+if (config.NODE_ENV !== Environments.PRODUCTION) {
   transports.push(
     new winston.transports.Console({
       format: combine(
@@ -26,10 +28,10 @@ if (config.NODE_ENV !== "production") {
 }
 
 const logger = winston.createLogger({
-  level: config.LOG_LEVEL || "info",
+  level: config.LOG_LEVEL,
   format: combine(timestamp(), errors({ stack: true }), json()),
   transports,
-  silent: config.NODE_ENV === "test",
+  silent: config.NODE_ENV === Environments.TEST,
 });
 
 export { logger };
