@@ -1,7 +1,6 @@
-import { AuthController } from "@/controllers/auth.controller";
-import authenticate from "@/middlewares/Authenticate.middleware";
-import validationError from "@/middlewares/ValidationError.middleware";
-import { AuthService } from "@/services/auth.service";
+import { login, logout, refreshToken, register } from "@/controllers/auth.controller";
+import authenticate from "@/middlewares/authenticate";
+import validationError from "@/middlewares/validationError";
 import {
   validateLogin,
   validateRefreshToken,
@@ -10,8 +9,6 @@ import {
 import { Router } from "express";
 
 const router = Router();
-const authService = new AuthService();
-const { login, register, refreshToken, logout } = new AuthController(authService);
 
 router.post("/register", validateRegister, validationError, register);
 
@@ -27,3 +24,4 @@ router.post(
 router.post("/logout", authenticate, logout);
 
 export { router as authRoutes };
+

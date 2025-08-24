@@ -1,6 +1,6 @@
 import { HttpStatusCodes } from "@/constants/api.constants";
 import { logger } from "@/lib/winston";
-import User from "@/models/User.model";
+import User from "@/models/user.model";
 import { TAuthRole } from "@/types/user.types";
 
 import type { Request, Response, NextFunction } from "express";

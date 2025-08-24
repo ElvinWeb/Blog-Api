@@ -10,6 +10,7 @@ import router from "@/routes";
 import { logger } from "@/lib/winston";
 import { connectToDatabase, disconnectFromDatabase } from "@/lib/mongoose";
 import { Environments } from "@/constants/environment.constants";
+import { COMPRESSION_THRESHOLD } from "./constants/app.constants";
 
 const app = express();
 const corsOptions: CorsOptions = {
@@ -36,7 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   compression({
-    threshold: config.COMPRESSION_THRESHOLD,
+    threshold: COMPRESSION_THRESHOLD,
   }),
 );
 app.use(helmet());

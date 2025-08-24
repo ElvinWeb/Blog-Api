@@ -3,127 +3,127 @@ import { HttpStatusCodes } from "@/constants/api.constants";
 import { COOKIE_MAX_AGE_DURATION } from "@/constants/auth.constants";
 import { Environments } from "@/constants/environment.constants";
 import { logger } from "@/lib/winston";
-import { AuthError, AuthService } from "@/services/auth.service";
 import { TUserLoginData, TUserRegisterData } from "@/types/user.types";
+import { IAuthError } from "@/types/auth.types";
 import type { Request, Response } from "express";
+import * as authService  from "@/services/auth.service";
 
-export class AuthController {
-  constructor(private authService: AuthService) {}
+export const login = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const loginData = req.body as TUserLoginData;
 
-  login = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const loginData = req.body as TUserLoginData;
+    const { authResponse, refreshToken } =
+      await authService.login(loginData);
 
-      const { authResponse, refreshToken } =
-        await this.authService.login(loginData);
+    setRefreshTokenCookie(res, refreshToken);
 
-      this.setRefreshTokenCookie(res, refreshToken);
+    res.status(HttpStatusCodes.OK).json(authResponse);
+  } catch (err) {
+    handleError(res, err);
+  }
+};
 
-      res.status(HttpStatusCodes.OK).json(authResponse);
-    } catch (err) {
-      this.handleError(res, err);
+export const register = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const registerData = req.body as TUserRegisterData;
+
+    const { authResponse, refreshToken } =
+      await authService.register(registerData);
+
+    setRefreshTokenCookie(res, refreshToken);
+
+    res.status(HttpStatusCodes.OK).json(authResponse);
+  } catch (err) {
+    handleError(res, err);
+  }
+};
+
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const refreshToken = req.cookies.refreshToken as string;
+
+    await authService.logout(refreshToken, req.userId);
+
+    clearRefreshTokenCookie(res);
+
+    res.sendStatus(HttpStatusCodes.NO_CONTENT);
+  } catch (err) {
+    handleError(res, err);
+  }
+};
+
+export const refreshToken = async (req: Request, res: Response) => {
+  try {
+    const refreshToken = req.cookies.refreshToken as string;
+
+    const result = await authService.refreshToken(refreshToken);
+
+    res.status(HttpStatusCodes.OK).send(result);
+  } catch (err) {
+    if (err instanceof IAuthError && err.code === "AuthenticationError") {
+      clearRefreshTokenCookie(res);
     }
-  };
+    handleError(res, err);
+  }
+};
 
-  register = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const registerData = req.body as TUserRegisterData;
+export const setRefreshTokenCookie = (
+  res: Response,
+  refreshToken: string,
+): void => {
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV === Environments.PRODUCTION,
+    sameSite: "strict",
+    maxAge: COOKIE_MAX_AGE_DURATION,
+  });
+};
 
-      const { authResponse, refreshToken } =
-        await this.authService.register(registerData);
+export const clearRefreshTokenCookie = (res: Response): void => {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: config.NODE_ENV === Environments.PRODUCTION,
+    sameSite: "strict",
+  });
+};
 
-      this.setRefreshTokenCookie(res, refreshToken);
-
-      res.status(HttpStatusCodes.OK).json(authResponse);
-    } catch (err) {
-      this.handleError(res, err);
-    }
-  };
-
-  logout = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const refreshToken = req.cookies.refreshToken as string;
-
-      await this.authService.logout(refreshToken, req.userId);
-
-      this.clearRefreshTokenCookie(res);
-
-      res.sendStatus(HttpStatusCodes.NO_CONTENT);
-    } catch (err) {
-      this.handleError(res, err);
-    }
-  };
-
-  refreshToken = async (req: Request, res: Response) => {
-    try {
-      const refreshToken = req.cookies.refreshToken as string;
-
-      const result = await this.authService.refreshToken(refreshToken);
-
-      res.status(HttpStatusCodes.OK).send(result);
-    } catch (err) {
-      if (err instanceof AuthError && err.code === "AuthenticationError") {
-        this.clearRefreshTokenCookie(res);
-      }
-      this.handleError(res, err);
-    }
-  };
-
-  private setRefreshTokenCookie(res: Response, refreshToken: string): void {
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: config.NODE_ENV === Environments.PRODUCTION,
-      sameSite: "strict",
-      maxAge: COOKIE_MAX_AGE_DURATION,
+export const handleError = (res: Response, err: unknown): void => {
+  if (err instanceof IAuthError) {
+    res.status(err.statusCode).json({
+      code: err.code,
+      message: err.message,
     });
+    return;
   }
 
-  private clearRefreshTokenCookie(res: Response): void {
-    res.clearCookie("refreshToken", {
-      httpOnly: true,
-      secure: config.NODE_ENV === Environments.PRODUCTION,
-      sameSite: "strict",
-    });
-  }
-
-  private handleError(res: Response, err: unknown): void {
-    if (err instanceof AuthError) {
-      res.status(err.statusCode).json({
-        code: err.code,
-        message: err.message,
+  if (err && typeof err === "object" && "name" in err) {
+    if (err.name === "ValidationError") {
+      res.status(HttpStatusCodes.BAD_REQUEST).json({
+        code: "ValidationError",
+        message: "Invalid input data",
+        error: err,
       });
       return;
     }
 
-    if (err && typeof err === "object" && "name" in err) {
-      if (err.name === "ValidationError") {
-        res.status(HttpStatusCodes.BAD_REQUEST).json({
-          code: "ValidationError",
-          message: "Invalid input data",
-          error: err,
-        });
-        return;
-      }
-
-      if (
-        err.name === "MongoServerError" &&
-        "code" in err &&
-        err.code === 11000
-      ) {
-        res.status(HttpStatusCodes.CONFLICT).json({
-          code: "ConflictError",
-          message: "User already exists",
-        });
-        return;
-      }
+    if (
+      err.name === "MongoServerError" &&
+      "code" in err &&
+      err.code === 11000
+    ) {
+      res.status(HttpStatusCodes.CONFLICT).json({
+        code: "ConflictError",
+        message: "User already exists",
+      });
+      return;
     }
-
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
-      code: "ServerError",
-      message: "Internal server error",
-      error: config.NODE_ENV === "development" ? err : undefined,
-    });
-
-    logger.error("Unexpected error in auth controller", err);
   }
-}
+
+  res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
+    code: "ServerError",
+    message: "Internal server error",
+    error: config.NODE_ENV === "development" ? err : undefined,
+  });
+
+  logger.error("Unexpected error in auth controller", err);
+};

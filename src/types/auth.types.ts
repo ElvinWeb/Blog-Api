@@ -7,6 +7,17 @@ export interface IAuthResponse {
   accessToken: string;
 }
 
+export class IAuthError extends Error {
+  constructor(
+    message: string,
+    public statusCode: number,
+    public code: string,
+  ) {
+    super(message);
+    this.name = "AuthError";
+  }
+}
+
 export interface IRefreshTokenResponse {
   accessToken: string;
 }
