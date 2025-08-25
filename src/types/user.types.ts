@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export interface IUser {
   username: string;
   email: string;
@@ -17,4 +19,5 @@ export interface IUser {
 
 export type TUserRegisterData = Pick<IUser, "email" | "password" | "role">;
 export type TUserLoginData = Pick<IUser, "email" | "password">;
+export type TUserId = Types.ObjectId | undefined | string;
 export type TAuthRole = "admin" | "user";
