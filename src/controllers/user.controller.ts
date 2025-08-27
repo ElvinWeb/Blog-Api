@@ -7,7 +7,7 @@ import { logger } from "@/libs/winston";
 import Blog from "@/models/blog.model";
 import User from "@/models/user.model";
 import { TUserId } from "@/types/user.types";
-import { handleError } from "@/utils/error";
+import { handleError } from "@/utils";
 import type { Request, Response } from "express";
 import { v2 as cloudinary } from "cloudinary";
 

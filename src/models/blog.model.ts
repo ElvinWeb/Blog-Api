@@ -1,5 +1,5 @@
 import { IBlog } from "@/types/blog.types";
-import { generateSlug } from "@/utils/generate";
+import { generateSlug } from "@/utils";
 import { model, Schema } from "mongoose";
 
 const blogSchema = new Schema<IBlog>(

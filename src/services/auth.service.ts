@@ -11,7 +11,7 @@ import Token from "@/models/token.model";
 import User from "@/models/user.model";
 import { IAuthError, IAuthResponse, IRefreshTokenResponse } from "@/types/auth.types";
 import { TUserLoginData, TUserRegisterData } from "@/types/user.types";
-import { generateUsername } from "@/utils/generate";
+import { generateUsername } from "@/utils";
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { Types } from "mongoose";
 

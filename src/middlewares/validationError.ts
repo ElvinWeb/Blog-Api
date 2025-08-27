@@ -1,7 +1,6 @@
-import { validationResult } from "express-validator";
-
-import type { Request, Response, NextFunction } from "express";
 import { HttpStatusCodes } from "@/constants/api.constants";
+import type { NextFunction, Request, Response } from "express";
+import { validationResult } from "express-validator";
 
 const validationError = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);

@@ -1,6 +1,6 @@
-import winston from "winston";
 import config from "@/config";
 import { Environments } from "@/constants/environment.constants";
+import winston from "winston";
 
 const { combine, timestamp, json, errors, align, printf, colorize } = winston.format;
 

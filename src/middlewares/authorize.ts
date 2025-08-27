@@ -3,7 +3,7 @@ import { logger } from "@/libs/winston";
 import User from "@/models/user.model";
 import { TAuthRole } from "@/types/user.types";
 
-import type { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 
 const authorize = (roles: TAuthRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
