@@ -3,12 +3,13 @@ import {
   DEFAULT_RES_LIMIT,
   DEFAULT_RES_OFFSET,
 } from "@/constants/response.constants";
-import { logger } from "@/lib/winston";
+import { logger } from "@/libs/winston";
 import Blog from "@/models/blog.model";
 import User from "@/models/user.model";
 import { TUserId } from "@/types/user.types";
 import { handleError } from "@/utils/error";
 import type { Request, Response } from "express";
+import { v2 as cloudinary } from "cloudinary";
 
 export const getCurrentUser = async (
   req: Request,
@@ -187,6 +188,7 @@ const cleanupUserData = async (userId: TUserId): Promise<void> => {
     .exec();
 
   const publicIds = blogs.map(({ banner }) => banner.publicId);
+  await cloudinary.api.delete_resources(publicIds);
 
   logger.info("Multiple blog banners deleted from Cloudinary", {
     publicIds,

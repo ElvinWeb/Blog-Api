@@ -1,5 +1,5 @@
 import { HttpStatusCodes } from "@/constants/api.constants";
-import { logger } from "@/lib/winston";
+import { logger } from "@/libs/winston";
 import User from "@/models/user.model";
 import { TAuthRole } from "@/types/user.types";
 

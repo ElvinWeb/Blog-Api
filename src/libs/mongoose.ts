@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import config from "@/config";
-import { logger } from "@/lib/winston";
+import { logger } from "@/libs/winston";
 import type { ConnectOptions } from "mongoose";
 
 const clientOptions: ConnectOptions = {

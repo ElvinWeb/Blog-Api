@@ -5,8 +5,8 @@ import {
   generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
-} from "@/lib/jwt";
-import { logger } from "@/lib/winston";
+} from "@/libs/jwt";
+import { logger } from "@/libs/winston";
 import Token from "@/models/token.model";
 import User from "@/models/user.model";
 import { IAuthError, IAuthResponse, IRefreshTokenResponse } from "@/types/auth.types";

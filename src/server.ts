@@ -5,10 +5,10 @@ import type { CorsOptions } from "cors";
 import cookieParser from "cookie-parser";
 import compression from "compression";
 import helmet from "helmet";
-import limiter from "@/lib/express_rate_limit";
+import limiter from "@/libs/express_rate_limit";
 import router from "@/routes";
-import { logger } from "@/lib/winston";
-import { connectToDatabase, disconnectFromDatabase } from "@/lib/mongoose";
+import { logger } from "@/libs/winston";
+import { connectToDatabase, disconnectFromDatabase } from "@/libs/mongoose";
 import { Environments } from "@/constants/environment.constants";
 import { COMPRESSION_THRESHOLD } from "./constants/app.constants";
 

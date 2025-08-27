@@ -17,4 +17,9 @@ export interface IBlog {
   status: TBlogStatus;
 }
 
-type TBlogStatus = "draft" | "published";
+export interface IQueryStatus {
+  status?: TBlogStatus;
+}
+
+export type TBlogData = Pick<IBlog, "title" | "content" | "banner" | "status">;
+export type TBlogStatus = "draft" | "published";

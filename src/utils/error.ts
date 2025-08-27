@@ -1,6 +1,6 @@
 import config from "@/config";
 import { HttpStatusCodes } from "@/constants/api.constants";
-import { logger } from "@/lib/winston";
+import { logger } from "@/libs/winston";
 import { IAuthError } from "@/types/auth.types";
 import type { Response } from "express";
 
