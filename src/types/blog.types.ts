@@ -23,3 +23,4 @@ export interface IQueryStatus {
 
 export type TBlogData = Pick<IBlog, "title" | "content" | "banner" | "status">;
 export type TBlogStatus = "draft" | "published";
+export type TBlogUploadMethod = "post" | "put";
