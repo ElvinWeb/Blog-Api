@@ -1,8 +1,3 @@
-import { Environments } from "@/constants/environment.constants";
-import limiter from "@/libs/express_rate_limit";
-import { connectToDatabase, disconnectFromDatabase } from "@/libs/mongoose";
-import { logger } from "@/libs/winston";
-import router from "@/routes";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import type { CorsOptions } from "cors";
@@ -11,6 +6,11 @@ import express from "express";
 import helmet from "helmet";
 import config from "./config";
 import { COMPRESSION_THRESHOLD } from "./constants/app.constants";
+import { Environments } from "./constants/environment.constants";
+import limiter from "./libs/express_rate_limit";
+import { connectToDatabase, disconnectFromDatabase } from "./libs/mongoose";
+import { logger } from "./libs/winston";
+import router from "./routes";
 
 const app = express();
 const corsOptions: CorsOptions = {

@@ -1,3 +1,5 @@
+import { Router } from "express";
+import multer from "multer";
 import {
   createBlog,
   deleteBlog,
@@ -5,11 +7,11 @@ import {
   getBlogBySlug,
   getBlogsByUser,
   updateBlog,
-} from "@/controllers/blog.controller";
-import authenticate from "@/middlewares/authenticate";
-import authorize from "@/middlewares/authorize";
-import uploadBlogBanner from "@/middlewares/uploadBlogBanner";
-import validationError from "@/middlewares/validationError";
+} from "../controllers/blog.controller";
+import authenticate from "../middlewares/authenticate";
+import authorize from "../middlewares/authorize";
+import uploadBlogBanner from "../middlewares/uploadBlogBanner";
+import validationError from "../middlewares/validationError";
 import {
   validateBlogId,
   validateBlogSlug,
@@ -17,9 +19,7 @@ import {
   validateGetAllBlogs,
   validateGetBlogsByUser,
   validateUpdateBlog,
-} from "@/validators/blog.validator";
-import { Router } from "express";
-import multer from "multer";
+} from "../validators/blog.validator";
 
 const router = Router();
 const upload = multer();

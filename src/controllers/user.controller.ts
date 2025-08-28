@@ -1,8 +1,8 @@
-import { HttpStatusCodes } from "@/constants/api.constants";
-import * as userService from "@/services/user.service";
-import { IUpdateUserData } from "@/types/user.types";
-import { handleError } from "@/utils";
 import type { Request, Response } from "express";
+import { HttpStatusCodes } from "../constants/api.constants";
+import * as userService from "../services/user.service";
+import { IUpdateUserData } from "../types/user.types";
+import { handleError } from "../utils";
 
 export const getCurrentUser = async (
   req: Request,

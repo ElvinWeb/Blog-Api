@@ -1,7 +1,7 @@
-import config from "@/config";
-import { logger } from "@/libs/winston";
 import type { ConnectOptions } from "mongoose";
 import mongoose from "mongoose";
+import config from "../config";
+import { logger } from "./winston";
 
 const clientOptions: ConnectOptions = {
   dbName: "blog-db",

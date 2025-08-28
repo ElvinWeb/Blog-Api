@@ -1,10 +1,10 @@
-import config from "@/config";
-import { HttpStatusCodes } from "@/constants/api.constants";
-import { logger } from "@/libs/winston";
-import { AuthError } from "@/types/auth.types";
-import { BlogError } from "@/types/blog.types";
-import { UserError } from "@/types/user.types";
 import type { Response } from "express";
+import config from "../config";
+import { HttpStatusCodes } from "../constants/api.constants";
+import { logger } from "../libs/winston";
+import { AuthError } from "../types/auth.types";
+import { BlogError } from "../types/blog.types";
+import { UserError } from "../types/user.types";
 
 export const handleError = (res: Response, err: unknown): void => {
   if (err instanceof AuthError) {

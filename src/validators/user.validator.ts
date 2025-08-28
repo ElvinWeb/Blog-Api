@@ -1,5 +1,5 @@
-import User from "@/models/user.model";
 import { body, param, query } from "express-validator";
+import User from "../models/user.model";
 
 export const validateUpdateCurrentUser = [
   body("username")

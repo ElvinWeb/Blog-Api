@@ -1,19 +1,19 @@
-import { HttpStatusCodes } from "@/constants/api.constants";
+import { v2 as cloudinary } from "cloudinary";
+import { HttpStatusCodes } from "../constants/api.constants";
 import {
   DEFAULT_RES_LIMIT,
   DEFAULT_RES_OFFSET,
-} from "@/constants/response.constants";
-import { logger } from "@/libs/winston";
-import Blog from "@/models/blog.model";
-import User from "@/models/user.model";
+} from "../constants/response.constants";
+import { logger } from "../libs/winston";
+import Blog from "../models/blog.model";
+import User from "../models/user.model";
 import {
   IUpdateUserData,
   IUser,
-  UserError,
   IUserListResponse,
   TUserId,
-} from "@/types/user.types";
-import { v2 as cloudinary } from "cloudinary";
+  UserError,
+} from "../types/user.types";
 
 export const getCurrentUser = async (userId: TUserId): Promise<IUser> => {
   const user = await User.findById(userId).select("-__v").lean().exec();

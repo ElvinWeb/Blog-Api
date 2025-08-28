@@ -1,9 +1,9 @@
-import { HttpStatusCodes } from "@/constants/api.constants";
-import * as authService from "@/services/auth.service";
-import { AuthError } from "@/types/auth.types";
-import { TUserLoginData, TUserRegisterData } from "@/types/user.types";
-import { handleError } from "@/utils";
 import type { Request, Response } from "express";
+import { HttpStatusCodes } from "../constants/api.constants";
+import * as authService from "../services/auth.service";
+import { AuthError } from "../types/auth.types";
+import { TUserLoginData, TUserRegisterData } from "../types/user.types";
+import { handleError } from "../utils";
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {

@@ -1,10 +1,10 @@
-import { MAX_FILE_SIZE } from "@/constants/app.constants";
-import uploadToCloudinary from "@/libs/cloudinary";
-import { logger } from "@/libs/winston";
-import Blog from "@/models/blog.model";
-import { TBlogUploadMethod } from "@/types/blog.types";
 import type { UploadApiErrorResponse } from "cloudinary";
 import type { NextFunction, Request, Response } from "express";
+import { MAX_FILE_SIZE } from "../constants/app.constants";
+import uploadToCloudinary from "../libs/cloudinary";
+import { logger } from "../libs/winston";
+import Blog from "../models/blog.model";
+import { TBlogUploadMethod } from "../types/blog.types";
 
 const uploadBlogBanner = (method: TBlogUploadMethod) => {
   return async (req: Request, res: Response, next: NextFunction) => {

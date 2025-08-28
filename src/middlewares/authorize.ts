@@ -1,9 +1,8 @@
-import { HttpStatusCodes } from "@/constants/api.constants";
-import { logger } from "@/libs/winston";
-import User from "@/models/user.model";
-import { TAuthRole } from "@/types/user.types";
-
 import type { NextFunction, Request, Response } from "express";
+import { HttpStatusCodes } from "../constants/api.constants";
+import { logger } from "../libs/winston";
+import User from "../models/user.model";
+import { TAuthRole } from "../types/user.types";
 
 const authorize = (roles: TAuthRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {

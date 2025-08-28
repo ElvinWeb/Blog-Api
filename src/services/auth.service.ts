@@ -1,26 +1,26 @@
-import config from "@/config";
-import { HttpStatusCodes } from "@/constants/api.constants";
-import { COOKIE_MAX_AGE_DURATION } from "@/constants/cookie.constants";
-import { Environments } from "@/constants/environment.constants";
-import { UserRoles } from "@/constants/user.constants";
+import type { Response } from "express";
+import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import { Types } from "mongoose";
+import config from "../config";
+import { HttpStatusCodes } from "../constants/api.constants";
+import { COOKIE_MAX_AGE_DURATION } from "../constants/cookie.constants";
+import { Environments } from "../constants/environment.constants";
+import { UserRoles } from "../constants/user.constants";
 import {
   generateAccessToken,
   generateRefreshToken,
   verifyRefreshToken,
-} from "@/libs/jwt";
-import { logger } from "@/libs/winston";
-import Token from "@/models/token.model";
-import User from "@/models/user.model";
+} from "../libs/jwt";
+import { logger } from "../libs/winston";
+import Token from "../models/token.model";
+import User from "../models/user.model";
 import {
   AuthError,
   IAuthResponse,
   IRefreshTokenResponse,
-} from "@/types/auth.types";
-import { TUserLoginData, TUserRegisterData } from "@/types/user.types";
-import { generateUsername } from "@/utils";
-import type { Response } from "express";
-import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
-import { Types } from "mongoose";
+} from "../types/auth.types";
+import { TUserLoginData, TUserRegisterData } from "../types/user.types";
+import { generateUsername } from "../utils";
 
 export const login = async (
   loginData: TUserLoginData,

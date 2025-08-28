@@ -1,5 +1,5 @@
-import { REQUEST_LIMIT, REQUEST_WINDOWS_MS } from "@/constants/app.constants";
 import rateLimit from "express-rate-limit";
+import { REQUEST_LIMIT, REQUEST_WINDOWS_MS } from "../constants/app.constants";
 
 const limiter = rateLimit({
   windowMs: REQUEST_WINDOWS_MS,

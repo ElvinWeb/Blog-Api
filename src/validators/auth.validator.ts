@@ -1,10 +1,10 @@
+import bcrypt from "bcrypt";
+import { body, cookie } from "express-validator";
 import {
   MAX_EMAIL_LENGTH,
   MIN_PASSWORD_LENGTH,
-} from "@/constants/validation.constants";
-import User from "@/models/user.model";
-import bcrypt from "bcrypt";
-import { body, cookie } from "express-validator";
+} from "../constants/validation.constants";
+import User from "../models/user.model";
 
 export const validateRegister = [
   body("email")

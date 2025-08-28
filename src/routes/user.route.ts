@@ -1,3 +1,4 @@
+import { Router } from "express";
 import {
   deleteCurrentUser,
   deleteUser,
@@ -5,16 +6,15 @@ import {
   getCurrentUser,
   getUser,
   updateCurrentUser,
-} from "@/controllers/user.controller";
-import authenticate from "@/middlewares/authenticate";
-import authorize from "@/middlewares/authorize";
-import validationError from "@/middlewares/validationError";
+} from "../controllers/user.controller";
+import authenticate from "../middlewares/authenticate";
+import authorize from "../middlewares/authorize";
+import validationError from "../middlewares/validationError";
 import {
   validateGetAllUsers,
   validateUpdateCurrentUser,
   validateUserId,
-} from "@/validators/user.validator";
-import { Router } from "express";
+} from "../validators/user.validator";
 
 const router = Router();
 

@@ -1,22 +1,22 @@
-import { HttpStatusCodes } from "@/constants/api.constants";
+import { v2 as cloudinary } from "cloudinary";
+import DOMPurify from "dompurify";
+import { JSDOM } from "jsdom";
+import { HttpStatusCodes } from "../constants/api.constants";
 import {
   DEFAULT_RES_LIMIT,
   DEFAULT_RES_OFFSET,
-} from "@/constants/response.constants";
-import { logger } from "@/libs/winston";
-import Blog from "@/models/blog.model";
-import User from "@/models/user.model";
+} from "../constants/response.constants";
+import { logger } from "../libs/winston";
+import Blog from "../models/blog.model";
+import User from "../models/user.model";
 import {
   BlogError,
   IBlog,
   IBlogListResponse,
   IQueryStatus,
   TBlogData,
-} from "@/types/blog.types";
-import { TUserId } from "@/types/user.types";
-import DOMPurify from "dompurify";
-import { JSDOM } from "jsdom";
-import { v2 as cloudinary } from "cloudinary";
+} from "../types/blog.types";
+import { TUserId } from "../types/user.types";
 
 const window = new JSDOM("").window;
 const purify = DOMPurify(window);

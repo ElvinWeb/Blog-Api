@@ -1,5 +1,5 @@
-import { IToken } from "@/types/token.types";
 import { model, Schema } from "mongoose";
+import { IToken } from "../types/token.types";
 
 const tokenSchema = new Schema<IToken>({
   token: {

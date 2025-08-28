@@ -1,17 +1,17 @@
+import { Router } from "express";
 import {
   login,
   logout,
   refreshToken,
   register,
-} from "@/controllers/auth.controller";
-import authenticate from "@/middlewares/authenticate";
-import validationError from "@/middlewares/validationError";
+} from "../controllers/auth.controller";
+import authenticate from "../middlewares/authenticate";
+import validationError from "../middlewares/validationError";
 import {
   validateLogin,
   validateRefreshToken,
   validateRegister,
-} from "@/validators/auth.validator";
-import { Router } from "express";
+} from "../validators/auth.validator";
 
 const router = Router();
 

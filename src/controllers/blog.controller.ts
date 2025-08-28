@@ -1,8 +1,8 @@
-import { HttpStatusCodes } from "@/constants/api.constants";
-import * as blogService from "@/services/blog.service";
-import { TBlogData } from "@/types/blog.types";
-import { handleError } from "@/utils";
 import type { Request, Response } from "express";
+import { HttpStatusCodes } from "../constants/api.constants";
+import * as blogService from "../services/blog.service";
+import { TBlogData } from "../types/blog.types";
+import { handleError } from "../utils";
 
 export const createBlog = async (
   req: Request,
