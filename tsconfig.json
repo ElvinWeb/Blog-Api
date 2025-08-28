@@ -11,7 +11,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["src/*"]
     },
     "typeRoots": ["./src/types"]
   },
