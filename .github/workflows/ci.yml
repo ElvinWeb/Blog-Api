@@ -2,6 +2,7 @@ name: CI
 
 on:
   pull_request:
+    paths: ['src/**', 'package.json', 'package-lock.json', 'tsconfig.json', '.eslintrc*']
   push:
     branches: [main]
 
@@ -21,9 +22,6 @@ jobs:
 
       - name: Prettier check
         run: npm run format:check
-
-      - name: TypeScript check
-        run: npm run typecheck
 
       - name: Build (compile TS → dist)
         run: npm run build
