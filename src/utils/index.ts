@@ -1,11 +1,29 @@
 import config from "@/config";
 import { HttpStatusCodes } from "@/constants/api.constants";
 import { logger } from "@/libs/winston";
-import { IAuthError } from "@/types/auth.types";
+import { AuthError } from "@/types/auth.types";
+import { BlogError } from "@/types/blog.types";
+import { UserError } from "@/types/user.types";
 import type { Response } from "express";
 
 export const handleError = (res: Response, err: unknown): void => {
-  if (err instanceof IAuthError) {
+  if (err instanceof AuthError) {
+    res.status(err.statusCode).json({
+      code: err.code,
+      message: err.message,
+    });
+    return;
+  }
+
+  if (err instanceof UserError) {
+    res.status(err.statusCode).json({
+      code: err.code,
+      message: err.message,
+    });
+    return;
+  }
+
+  if (err instanceof BlogError) {
     res.status(err.statusCode).json({
       code: err.code,
       message: err.message,

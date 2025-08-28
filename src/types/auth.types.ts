@@ -1,13 +1,4 @@
-export interface IAuthResponse {
-  user: {
-    username: string;
-    email: string;
-    role: string;
-  };
-  accessToken: string;
-}
-
-export class IAuthError extends Error {
+export class AuthError extends Error {
   constructor(
     message: string,
     public statusCode: number,
@@ -16,6 +7,15 @@ export class IAuthError extends Error {
     super(message);
     this.name = "AuthError";
   }
+}
+
+export interface IAuthResponse {
+  user: {
+    username: string;
+    email: string;
+    role: string;
+  };
+  accessToken: string;
 }
 
 export interface IRefreshTokenResponse {

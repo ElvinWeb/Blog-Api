@@ -1,5 +1,7 @@
 import config from "@/config";
 import { HttpStatusCodes } from "@/constants/api.constants";
+import { COOKIE_MAX_AGE_DURATION } from "@/constants/cookie.constants";
+import { Environments } from "@/constants/environment.constants";
 import { UserRoles } from "@/constants/user.constants";
 import {
   generateAccessToken,
@@ -9,9 +11,14 @@ import {
 import { logger } from "@/libs/winston";
 import Token from "@/models/token.model";
 import User from "@/models/user.model";
-import { IAuthError, IAuthResponse, IRefreshTokenResponse } from "@/types/auth.types";
+import {
+  AuthError,
+  IAuthResponse,
+  IRefreshTokenResponse,
+} from "@/types/auth.types";
 import { TUserLoginData, TUserRegisterData } from "@/types/user.types";
 import { generateUsername } from "@/utils";
+import type { Response } from "express";
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { Types } from "mongoose";
 
@@ -29,7 +36,7 @@ export const login = async (
     .exec();
 
   if (!user) {
-    throw new IAuthError(
+    throw new AuthError(
       "User not found!",
       HttpStatusCodes.NOT_FOUND,
       "NotFound",
@@ -76,7 +83,7 @@ export const register = async (
     logger.warn(
       `User with email ${email} tried to register as an admin but is not in the whitelist!`,
     );
-    throw new IAuthError(
+    throw new AuthError(
       "You cannot register as an admin!",
       HttpStatusCodes.FORBIDDEN,
       "AuthorizationError",
@@ -140,7 +147,7 @@ export const refreshToken = async (
   refreshToken: string,
 ): Promise<IRefreshTokenResponse> => {
   if (!refreshToken) {
-    throw new IAuthError(
+    throw new AuthError(
       "Refresh token is required!",
       HttpStatusCodes.UNAUTHORIZED,
       "AuthenticationError",
@@ -150,7 +157,7 @@ export const refreshToken = async (
   const tokenExists = await Token.exists({ token: refreshToken });
 
   if (!tokenExists) {
-    throw new IAuthError(
+    throw new AuthError(
       "Invalid refresh token!",
       HttpStatusCodes.UNAUTHORIZED,
       "AuthenticationError",
@@ -168,7 +175,7 @@ export const refreshToken = async (
   } catch (err) {
     if (err instanceof TokenExpiredError) {
       await Token.deleteOne({ token: refreshToken });
-      throw new IAuthError(
+      throw new AuthError(
         "Refresh token expired, please login again",
         HttpStatusCodes.UNAUTHORIZED,
         "AuthenticationError",
@@ -176,7 +183,7 @@ export const refreshToken = async (
     }
 
     if (err instanceof JsonWebTokenError) {
-      throw new IAuthError(
+      throw new AuthError(
         "Invalid refresh token!",
         HttpStatusCodes.UNAUTHORIZED,
         "AuthenticationError",
@@ -186,4 +193,24 @@ export const refreshToken = async (
     logger.error("Error during refresh token verification!", err);
     throw err;
   }
+};
+
+export const setRefreshTokenCookie = (
+  res: Response,
+  refreshToken: string,
+): void => {
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV === Environments.PRODUCTION,
+    sameSite: "strict",
+    maxAge: COOKIE_MAX_AGE_DURATION,
+  });
+};
+
+export const clearRefreshTokenCookie = (res: Response): void => {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: config.NODE_ENV === Environments.PRODUCTION,
+    sameSite: "strict",
+  });
 };

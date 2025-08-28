@@ -1,5 +1,23 @@
 import { Types } from "mongoose";
 
+export class BlogError extends Error {
+  constructor(
+    message: string,
+    public statusCode: number,
+    public code: string,
+  ) {
+    super(message);
+    this.name = "BlogError";
+  }
+}
+
+export interface IBlogListResponse {
+  limit: number;
+  offset: number;
+  total: number;
+  blogs: IBlog[];
+}
+
 export interface IBlog {
   title: string;
   slug: string;

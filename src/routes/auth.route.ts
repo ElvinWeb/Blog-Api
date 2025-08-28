@@ -1,4 +1,9 @@
-import { login, logout, refreshToken, register } from "@/controllers/auth.controller";
+import {
+  login,
+  logout,
+  refreshToken,
+  register,
+} from "@/controllers/auth.controller";
 import authenticate from "@/middlewares/authenticate";
 import validationError from "@/middlewares/validationError";
 import {
@@ -24,4 +29,3 @@ router.post(
 router.post("/logout", authenticate, logout);
 
 export { router as authRoutes };
-
